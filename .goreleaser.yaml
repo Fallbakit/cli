@@ -26,12 +26,12 @@ archives:
     name_template: "fallbakit_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
-        format: zip
+        formats: [zip]
 
 checksum:
   name_template: "checksums.txt"
 
-brews:
+homebrew_casks:
   - name: fallbakit
     repository:
       owner: fallbakit
@@ -40,10 +40,14 @@ brews:
     homepage: "https://fallbakit.com"
     description: "Local-first AI inference with cloud fallback — developer CLI"
     license: "Apache-2.0"
-    install: |
-      bin.install "fallbakit"
-    test: |
-      system "#{bin}/fallbakit", "version"
+    # The binary is unsigned; strip the gatekeeper quarantine on install so
+    # macOS doesn't block first run ("developer cannot be verified").
+    hooks:
+      post:
+        install: |
+          if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/fallbakit"]
+          end
 
 release:
   github:

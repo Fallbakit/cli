@@ -9,7 +9,7 @@
 curl -fsSL https://fallbakit.com/install.sh | sh
 
 # Homebrew
-brew install fallbakit/homebrew-tap/fallbakit
+brew install --cask fallbakit/homebrew-tap/fallbakit
 
 # Go
 go install github.com/fallbakit/cli/cmd/fallbakit-cli@latest
