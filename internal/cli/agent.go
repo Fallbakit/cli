@@ -25,10 +25,11 @@ func (r *RunnerRecord) envLines(apiBaseURL string) []string {
 	}
 }
 
-// launchAgent locates the fallbakit-agent binary and execs it with this runner's
-// credentials. The agent owns the long-lived tunnel; the CLI just starts it.
+// launchAgent locates (or downloads) the fallbakit-agent binary and execs it with
+// this runner's credentials. The agent owns the long-lived tunnel; the CLI just
+// starts it.
 func launchAgent(ctx context.Context, rec *RunnerRecord, apiBaseURL string) error {
-	bin, err := findAgentBinary()
+	bin, err := ensureAgentBinary(ctx)
 	if err != nil {
 		return err
 	}
@@ -70,7 +71,7 @@ func findAgentBinary() (string, error) {
 	if path, err := exec.LookPath("fallbakit-agent"); err == nil {
 		return path, nil
 	}
-	return "", errors.New("could not find the `fallbakit-agent` binary. Install it alongside the CLI or set FALLBAKIT_AGENT_BIN")
+	return "", fmt.Errorf("could not find the `fallbakit-agent` binary. Download it from https://github.com/%s/releases or set FALLBAKIT_AGENT_BIN", agentRepo)
 }
 
 // resolveRunnerRecord returns the requested runner record, or the only one when no
