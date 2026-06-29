@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	defaultDashboardURL = "http://localhost:3000"
-	defaultAPIBaseURL   = "http://localhost:8080"
+	defaultDashboardURL = "https://fallbakit.com"
+	defaultAPIBaseURL   = "https://api.fallbakit.com"
 )
 
 // Config holds non-secret CLI settings persisted to ~/.fallbakit/config.json.
